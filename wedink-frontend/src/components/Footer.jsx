@@ -194,8 +194,7 @@ export default function Footer() {
 
           <div className="footer-bottom">
             <div className="footer-copy">© 2025 WedInk Private Limited. All rights reserved.</div>
-            <div className="footer-made">
-              Crafted with <span className="made-heart">♥</span> by <span className="made-name">Shivam</span>
+            <div className="footer-made"> <span className="made-heart">♥</span><span className="made-name">Wedink</span><span className="made-heart">♥</span>
             </div>
             <div className="footer-legal">
               <a href="#">Privacy Policy</a>

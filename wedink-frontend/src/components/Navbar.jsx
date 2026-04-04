@@ -1,199 +1,4 @@
-// import { Link, useNavigate } from 'react-router-dom'
-// import { useState } from 'react'
-// import { useAuth } from '../context/AuthContext'
-// import { useFlash } from '../context/FlashContext'
-// import api from '../services/api'
 
-// export default function Navbar() {
-//   const { curruser, logout } = useAuth()
-//   const { showSuccess, showError } = useFlash()
-//   const navigate = useNavigate()
-//   const [search, setSearch] = useState('')
-
-//   const handleLogout = async () => {
-//     try {
-//       await api.get('/auth/logout')
-//       logout()
-//       showSuccess('You are LoggedOut Successfully !!')
-//       navigate('/')
-//     } catch {
-//       showError('Logout failed')
-//     }
-//   }
-
-//   const handleSearch = (e) => {
-//     e.preventDefault()
-//     navigate(`/listings?shopName=${encodeURIComponent(search)}`)
-//   }
-
-//   return (
-//     <>
-//       {/* Offcanvas for mobile */}
-//       <div
-//         className="offcanvas offcanvas-start"
-//         tabIndex="-1"
-//         id="offcanvasNavbar"
-//         aria-labelledby="offcanvasNavbarLabel"
-//       >
-//         <div className="offcanvas-header">
-//           <h5 className="offcanvas-title" id="offcanvasNavbarLabel">
-//             <i className="fas fa-rings me-2"></i>WedInk
-//           </h5>
-//           <button
-//             type="button"
-//             className="btn-close btn-close-white"
-//             data-bs-dismiss="offcanvas"
-//             aria-label="Close"
-//           ></button>
-//         </div>
-//         <div className="offcanvas-body">
-//           <ul className="navbar-nav">
-//             <li className="nav-item">
-//               <Link className="nav-link active" to="/listings" data-bs-dismiss="offcanvas">
-//                 <i className="fas fa-home me-2"></i>Home
-//               </Link>
-//             </li>
-//             {!curruser && (
-//               <>
-//                 <li className="nav-item">
-//                   <Link className="nav-link" to="/login" data-bs-dismiss="offcanvas">
-//                     <i className="fas fa-sign-in-alt me-2"></i>Login
-//                   </Link>
-//                 </li>
-//                 <li className="nav-item">
-//                   <Link className="nav-link" to="/signup" data-bs-dismiss="offcanvas">
-//                     <i className="fas fa-user-plus me-2"></i>Sign Up
-//                   </Link>
-//                 </li>
-//               </>
-//             )}
-//             {curruser && (
-//               <>
-//                 <li className="nav-item">
-//                   <Link className="nav-link" to="/users/bookings" data-bs-dismiss="offcanvas">
-//                     <i className="fas fa-calendar-check me-2"></i>My Orders
-//                   </Link>
-//                 </li>
-//                 <li className="nav-item">
-//                   <button className="nav-link btn btn-link" onClick={handleLogout}>
-//                     <i className="fas fa-sign-out-alt me-2"></i>Logout
-//                   </button>
-//                 </li>
-//               </>
-//             )}
-//           </ul>
-//           <form onSubmit={handleSearch} className="mt-4">
-//             <div className="input-group">
-//               <input
-//                 className="form-control"
-//                 type="search"
-//                 placeholder="Search shop..."
-//                 value={search}
-//                 onChange={(e) => setSearch(e.target.value)}
-//               />
-//               <button
-//                 type="submit"
-//                 style={{
-//                   padding: '4px 30px',
-//                   fontSize: '12px',
-//                   backgroundColor: '#007bff',
-//                   color: 'white',
-//                   borderRadius: '2px',
-//                   border: 'none',
-//                   cursor: 'pointer',
-//                 }}
-//               >
-//                 <i className="fas fa-search" style={{ fontSize: '12px' }}></i>
-//               </button>
-//             </div>
-//           </form>
-//         </div>
-//       </div>
-
-//       {/* Main Navbar */}
-//       <nav className="navbar navbar-expand-lg fixed-top">
-//         <div className="container">
-//           <button
-//             className="navbar-toggler"
-//             type="button"
-//             data-bs-toggle="offcanvas"
-//             data-bs-target="#offcanvasNavbar"
-//             aria-controls="offcanvasNavbar"
-//           >
-//             <i className="fas fa-bars text-white"></i>
-//           </button>
-
-//           <Link className="navbar-brand" to="/">
-//             <i className="fa-regular fa-compass mass"></i>
-//           </Link>
-
-//           <div className="collapse navbar-collapse">
-//             <ul className="navbar-nav me-auto mb-2 mb-lg-0">
-//               <li className="nav-item">
-//                 <Link className="nav-link active" to="/">WedInk</Link>
-//               </li>
-//               <li className="nav-item">
-//                 <Link className="nav-link" to="/listings">Home</Link>
-//               </li>
-//               {!curruser && (
-//                 <>
-//                   <li className="nav-item">
-//                     <Link className="nav-link" to="/login">Login</Link>
-//                   </li>
-//                   <li className="nav-item">
-//                     <Link className="nav-link" to="/signup">Sign Up</Link>
-//                   </li>
-//                 </>
-//               )}
-//               {curruser && (
-//                 <>
-//                   <li className="nav-item">
-//                     <Link className="nav-link" to="/users/bookings">My Orders</Link>
-//                   </li>
-//                   <li className="nav-item">
-//                     <button
-//                       className="nav-link btn btn-link p-0"
-//                       style={{ textDecoration: 'none' }}
-//                       onClick={handleLogout}
-//                     >
-//                       Logout
-//                     </button>
-//                   </li>
-//                 </>
-//               )}
-//             </ul>
-
-//             <form onSubmit={handleSearch} className="d-flex">
-//               <div className="input-group">
-//                 <input
-//                   className="form-control"
-//                   type="search"
-//                   placeholder="Search shop..."
-//                   value={search}
-//                   onChange={(e) => setSearch(e.target.value)}
-//                 />
-//                 <button
-//                   type="submit"
-//                   style={{
-//                     padding: '4px 30px',
-//                     fontSize: '12px',
-//                     backgroundColor: '#007bff',
-//                     color: 'white',
-//                     borderRadius: '2px',
-//                     border: 'none',
-//                     cursor: 'pointer',
-//                   }}
-//                 >
-//                   <i className="fas fa-search" style={{ fontSize: '12px' }}></i>
-//                 </button>
-//               </div>
-//             </form>
-//           </div>
-//         </div>
-//       </nav>
-//     </>
-//   )
-// }
 import { Link, useNavigate } from 'react-router-dom'
 import { useState, useRef, useEffect } from 'react'
 import { useAuth } from '../context/AuthContext'
@@ -225,15 +30,32 @@ export default function Navbar() {
     navigate(`/listings?shopName=${encodeURIComponent(search)}`)
   }
 
-  // Close dropdown when clicking outside
+  // ✅ FIX 1: Navigation handler
+  const handleNavigate = (path) => {
+    setDropdownOpen(false)
+    navigate(path)
+  }
+
+  // ── Close offcanvas programmatically (fixes mobile nav) ──
+  const closeOffcanvas = () => {
+    const el = document.getElementById('offcanvasNavbar')
+    if (el && window.bootstrap) {
+      const instance =
+        window.bootstrap.Offcanvas.getInstance(el) ||
+        new window.bootstrap.Offcanvas(el)
+      instance.hide()
+    }
+  }
+
+  // ✅ FIX 5: Improved outside click logic using 'click' instead of 'mousedown'
   useEffect(() => {
     const handleClickOutside = (e) => {
       if (dropdownRef.current && !dropdownRef.current.contains(e.target)) {
         setDropdownOpen(false)
       }
     }
-    document.addEventListener('mousedown', handleClickOutside)
-    return () => document.removeEventListener('mousedown', handleClickOutside)
+    document.addEventListener('click', handleClickOutside)
+    return () => document.removeEventListener('click', handleClickOutside)
   }, [])
 
   // Get initials from username
@@ -447,6 +269,7 @@ export default function Navbar() {
           overflow: hidden;
           animation: dropIn 0.18s ease;
           transform-origin: top right;
+          z-index: 9999 !important; /* ✅ FIX 3: Z-index fix */
         }
         @keyframes dropIn {
           from { opacity: 0; transform: scale(0.93) translateY(-6px); }
@@ -539,6 +362,13 @@ export default function Navbar() {
           align-items: center;
         }
 
+        /* ── Mobile avatar — hidden on desktop ── */
+        .mobile-avatar {
+          display: none !important;
+          margin-left: auto;
+          margin-right: 4px;
+        }
+
         /* ── Offcanvas overrides ── */
         .offcanvas {
           background: #0f0f0f !important;
@@ -558,10 +388,13 @@ export default function Navbar() {
         @media (max-width: 991px) {
           .desktop-nav { display: none !important; }
           .mobile-toggler { display: flex !important; }
+          .mobile-avatar { display: flex !important; }
           .nav-brand { margin-left: 8px; }
+          .wedinknav .container { gap: 0; }
         }
         @media (min-width: 992px) {
           .mobile-toggler { display: none !important; }
+          .mobile-avatar { display: none !important; }
         }
       `}</style>
 
@@ -576,26 +409,33 @@ export default function Navbar() {
         <div className="offcanvas-body">
           <ul className="navbar-nav">
             <li className="nav-item">
-              <Link className="nav-link active" to="/listings" data-bs-dismiss="offcanvas">
+              <Link className="nav-link active" to="/listings" onClick={closeOffcanvas}>
                 <i className="fas fa-home me-2"></i>Home
               </Link>
             </li>
             {curruser && (
               <li className="nav-item">
-                <Link className="nav-link" to="/users/bookings" data-bs-dismiss="offcanvas">
+                <Link className="nav-link" to="/users/bookings" onClick={closeOffcanvas}>
                   <i className="fas fa-calendar-check me-2"></i>My Orders
+                </Link>
+              </li>
+            )}
+            {curruser && (
+              <li className="nav-item">
+                <Link className="nav-link" to="/profile" onClick={closeOffcanvas}>
+                  <i className="fas fa-user me-2"></i>Profile
                 </Link>
               </li>
             )}
             {!curruser && (
               <>
                 <li className="nav-item">
-                  <Link className="nav-link" to="/login" data-bs-dismiss="offcanvas">
+                  <Link className="nav-link" to="/login" onClick={closeOffcanvas}>
                     <i className="fas fa-sign-in-alt me-2"></i>Login
                   </Link>
                 </li>
                 <li className="nav-item">
-                  <Link className="nav-link" to="/signup" data-bs-dismiss="offcanvas">
+                  <Link className="nav-link" to="/signup" onClick={closeOffcanvas}>
                     <i className="fas fa-user-plus me-2"></i>Sign Up
                   </Link>
                 </li>
@@ -603,16 +443,37 @@ export default function Navbar() {
             )}
             {curruser && (
               <li className="nav-item">
-                <button className="nav-link btn btn-link" onClick={handleLogout} data-bs-dismiss="offcanvas">
+                <button
+                  className="nav-link btn btn-link"
+                  style={{ color: '#f87171' }}
+                  onClick={() => { closeOffcanvas(); handleLogout(); }}
+                >
                   <i className="fas fa-sign-out-alt me-2"></i>Logout
                 </button>
               </li>
             )}
           </ul>
-          <form onSubmit={handleSearch} className="mt-4">
+
+          <form onSubmit={(e) => { closeOffcanvas(); handleSearch(e); }} className="mt-4">
             <div className="input-group">
-              <input className="form-control" type="search" placeholder="Search shop..." value={search} onChange={(e) => setSearch(e.target.value)} />
-              <button type="submit" style={{ padding: '8px 18px', background: 'linear-gradient(135deg,#c9a96e,#e8c98a)', color: '#0f0f0f', border: 'none', borderRadius: '0 8px 8px 0', cursor: 'pointer' }}>
+              <input
+                className="form-control"
+                type="search"
+                placeholder="Search shop..."
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+              />
+              <button
+                type="submit"
+                style={{
+                  padding: '8px 18px',
+                  background: 'linear-gradient(135deg,#c9a96e,#e8c98a)',
+                  color: '#0f0f0f',
+                  border: 'none',
+                  borderRadius: '0 8px 8px 0',
+                  cursor: 'pointer',
+                }}
+              >
                 <i className="fas fa-search" style={{ fontSize: '13px' }}></i>
               </button>
             </div>
@@ -625,7 +486,13 @@ export default function Navbar() {
         <div className="container">
 
           {/* Mobile toggler */}
-          <button className="mobile-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar" aria-controls="offcanvasNavbar">
+          <button
+            className="mobile-toggler"
+            type="button"
+            data-bs-toggle="offcanvas"
+            data-bs-target="#offcanvasNavbar"
+            aria-controls="offcanvasNavbar"
+          >
             <i className="fas fa-bars" style={{ fontSize: 15 }}></i>
           </button>
 
@@ -634,6 +501,54 @@ export default function Navbar() {
             <span className="brand-icon"><i className="fa-regular fa-compass"></i></span>
             WedInk
           </Link>
+
+          {/* ── Mobile avatar dropdown (only when logged in) ── */}
+          {curruser && (
+            <div className="profile-dropdown-wrapper mobile-avatar" ref={dropdownRef}>
+              {/* ✅ FIX 4: stopPropagation on avatar button */}
+              <button
+                className={`avatar-btn${dropdownOpen ? ' open' : ''}`}
+                onClick={(e) => {
+                  e.stopPropagation()
+                  setDropdownOpen((v) => !v)
+                }}
+                aria-label="Profile menu"
+              >
+                {getInitials(curruser?.username || curruser?.name || curruser?.email)}
+              </button>
+
+              {dropdownOpen && (
+                <div className="profile-dropdown">
+                  <div className="dropdown-user-info">
+                    <div className="user-name">{curruser?.username || curruser?.name || 'User'}</div>
+                    <div className="user-label">Member</div>
+                  </div>
+                  <ul className="dropdown-menu-list">
+                    {/* ✅ FIX 2: Replace Link with button + handleNavigate */}
+                    <li>
+                      <button onClick={() => handleNavigate('/users/bookings')}>
+                        <span className="menu-icon"><i className="fas fa-calendar-check"></i></span>
+                        My Orders
+                      </button>
+                    </li>
+                    <li>
+                      <button onClick={() => handleNavigate('/profile')}>
+                        <span className="menu-icon"><i className="fas fa-user"></i></span>
+                        Profile
+                      </button>
+                    </li>
+                    <div className="dropdown-divider"></div>
+                    <li className="logout-item">
+                      <button onClick={handleLogout}>
+                        <span className="menu-icon"><i className="fas fa-sign-out-alt"></i></span>
+                        Logout
+                      </button>
+                    </li>
+                  </ul>
+                </div>
+              )}
+            </div>
+          )}
 
           {/* Desktop nav */}
           <div className="desktop-nav" style={{ display: 'flex', alignItems: 'center', flex: 1, gap: 8 }}>
@@ -647,8 +562,15 @@ export default function Navbar() {
             {/* Search */}
             <form onSubmit={handleSearch}>
               <div className="nav-search">
-                <input type="search" placeholder="Search shop..." value={search} onChange={(e) => setSearch(e.target.value)} />
-                <button type="submit"><i className="fas fa-search" style={{ fontSize: 13 }}></i></button>
+                <input
+                  type="search"
+                  placeholder="Search shop..."
+                  value={search}
+                  onChange={(e) => setSearch(e.target.value)}
+                />
+                <button type="submit">
+                  <i className="fas fa-search" style={{ fontSize: 13 }}></i>
+                </button>
               </div>
             </form>
 
@@ -659,11 +581,15 @@ export default function Navbar() {
                 <Link className="btn-primary-nav" to="/signup">Sign Up</Link>
               </div>
             ) : (
-              /* ── Profile Avatar Dropdown ── */
+              /* ── Desktop Profile Avatar Dropdown ── */
               <div className="profile-dropdown-wrapper" ref={dropdownRef} style={{ marginLeft: 12 }}>
+                {/* ✅ FIX 4: stopPropagation on avatar button */}
                 <button
                   className={`avatar-btn${dropdownOpen ? ' open' : ''}`}
-                  onClick={() => setDropdownOpen((v) => !v)}
+                  onClick={(e) => {
+                    e.stopPropagation()
+                    setDropdownOpen((v) => !v)
+                  }}
                   aria-label="Profile menu"
                 >
                   {getInitials(curruser?.username || curruser?.name || curruser?.email)}
@@ -671,28 +597,25 @@ export default function Navbar() {
 
                 {dropdownOpen && (
                   <div className="profile-dropdown">
-                    {/* User info */}
                     <div className="dropdown-user-info">
                       <div className="user-name">{curruser?.username || curruser?.name || 'User'}</div>
                       <div className="user-label">Member</div>
                     </div>
-
                     <ul className="dropdown-menu-list">
+                      {/* ✅ FIX 2: Replace Link with button + handleNavigate */}
                       <li>
-                        <Link to="/users/bookings" onClick={() => setDropdownOpen(false)}>
+                        <button onClick={() => handleNavigate('/users/bookings')}>
                           <span className="menu-icon"><i className="fas fa-calendar-check"></i></span>
                           My Orders
-                        </Link>
+                        </button>
                       </li>
                       <li>
-                        <Link to="/profile" onClick={() => setDropdownOpen(false)}>
+                        <button onClick={() => handleNavigate('/profile')}>
                           <span className="menu-icon"><i className="fas fa-user"></i></span>
                           Profile
-                        </Link>
+                        </button>
                       </li>
-
                       <div className="dropdown-divider"></div>
-
                       <li className="logout-item">
                         <button onClick={handleLogout}>
                           <span className="menu-icon"><i className="fas fa-sign-out-alt"></i></span>

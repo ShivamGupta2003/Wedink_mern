@@ -35,7 +35,12 @@ const bookingSchema = new mongoose.Schema(
       enum: ["Pending", "Confirmed", "Completed", "Cancelled"],
       default: "Pending",
     },
+     dueAmount: {
+      type: Number,
+      default: 0,   
+    },
   },
+
   { timestamps: true }
 );
 

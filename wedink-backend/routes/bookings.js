@@ -40,12 +40,45 @@ router.get(
 
 // ── POST /listings/:id/Mcard/:cardId/book ─────────────────
 // Place a new booking
+// router.post(
+//   "/",
+//   isLoggedIn,
+//   validateBooking,
+//   wrapAsync(async (req, res) => {
+//     const { id, cardId } = req.params;
+//     const listing = await Listing.findById(id);
+//     const marriageCard = await MarriageCard.findById(cardId);
+
+//     if (!listing || !marriageCard) {
+//       return res.status(404).json({ message: "Shop or Card not found!" });
+//     }
+
+//     const booking = new Booking({
+//       user: req.user._id,
+//       marriageCard: cardId,
+//       shop: id,
+//       phoneNumber: req.body.phoneNumber,
+//       customization: req.body.customization || "",
+//       quantity: req.body.quantity || 1,
+//       status: "Pending",
+//     });
+
+//     await booking.save();
+//     res.status(201).json({
+//       message: "Booking successful! Shop owner will contact you.",
+//       booking,
+//     });
+//   })
+// );
+
+
 router.post(
   "/",
   isLoggedIn,
   validateBooking,
   wrapAsync(async (req, res) => {
     const { id, cardId } = req.params;
+
     const listing = await Listing.findById(id);
     const marriageCard = await MarriageCard.findById(cardId);
 
@@ -53,17 +86,26 @@ router.post(
       return res.status(404).json({ message: "Shop or Card not found!" });
     }
 
+    const quantity = req.body.quantity || 1;
+
+    // ✅ Calculate total price
+    const totalAmount = quantity * (marriageCard.price || 0);
+
     const booking = new Booking({
       user: req.user._id,
       marriageCard: cardId,
       shop: id,
       phoneNumber: req.body.phoneNumber,
       customization: req.body.customization || "",
-      quantity: req.body.quantity || 1,
+      quantity: quantity,
       status: "Pending",
+
+      // ✅ IMPORTANT LINE
+      dueAmount: totalAmount,
     });
 
     await booking.save();
+
     res.status(201).json({
       message: "Booking successful! Shop owner will contact you.",
       booking,
@@ -118,12 +160,34 @@ router.get(
 
 // ── PUT /listings/:id/orders/:bookingId ───────────────────
 // Shop owner updates booking status
+// router.put(
+//   "/shop/:shopId/orders/:bookingId",
+//   isLoggedIn,
+//   wrapAsync(async (req, res) => {
+//     const { shopId, bookingId } = req.params;
+//     const { status } = req.body;
+
+//     const booking = await Booking.findById(bookingId).populate("shop");
+//     if (!booking || !booking.shop._id.equals(shopId)) {
+//       return res.status(404).json({ message: "Booking not found." });
+//     }
+//     if (!booking.shop.owner.equals(req.user._id)) {
+//       return res.status(403).json({ message: "You do not have permission to update this booking." });
+//     }
+
+//     booking.status = status;
+//     await booking.save();
+//     res.json({ message: "Booking status updated.", booking });
+//   })
+// );
+
+
 router.put(
   "/shop/:shopId/orders/:bookingId",
   isLoggedIn,
   wrapAsync(async (req, res) => {
     const { shopId, bookingId } = req.params;
-    const { status } = req.body;
+    const { status, dueAmount } = req.body; // 👈 extract dueAmount too
 
     const booking = await Booking.findById(bookingId).populate("shop");
     if (!booking || !booking.shop._id.equals(shopId)) {
@@ -133,12 +197,14 @@ router.put(
       return res.status(403).json({ message: "You do not have permission to update this booking." });
     }
 
-    booking.status = status;
+    // 👇 Only update fields that were actually sent
+    if (status !== undefined)    booking.status    = status;
+    if (dueAmount !== undefined) booking.dueAmount = dueAmount;
+
     await booking.save();
-    res.json({ message: "Booking status updated.", booking });
+    res.json({ message: "Booking updated.", booking });
   })
 );
-
 // ── DELETE /listings/:id/orders/:bookingId ────────────────
 // Shop owner OR booking user can delete
 router.delete(
